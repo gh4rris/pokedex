@@ -21,5 +21,5 @@ func commandInspect(cfg *config, args ...string) error {
 		}
 		return nil
 	}
-	return fmt.Errorf("You have not caught that pokemon")
+	return fmt.Errorf("you have not caught that pokemon")
 }

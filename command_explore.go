@@ -6,7 +6,7 @@ import (
 
 func commandExplore(cfg *config, args ...string) error {
 	if len(args) < 1 {
-		return fmt.Errorf("Location name required")
+		return fmt.Errorf("location name required")
 	}
 	area := args[0]
 	location, err := cfg.pokeapiClient.LocationIDInfo(area)

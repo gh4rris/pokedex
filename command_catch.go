@@ -21,6 +21,7 @@ func commandCatch(cfg *config, args ...string) error {
 		if _, ok := cfg.caughtPokemon[pokemon.Name]; !ok {
 			cfg.caughtPokemon[pokemon.Name] = pokemon
 			fmt.Printf("%s's data was added to the pokedex\n", pokemon.Name)
+			fmt.Println("You may now inspect it with the inspect comand.")
 		}
 	} else {
 		fmt.Printf("%s escaped!\n", pokemon.Name)
