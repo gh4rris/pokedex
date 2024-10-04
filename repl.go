@@ -13,6 +13,7 @@ type config struct {
 	pokeapiClient   pokeapi.Client
 	nextLocationURL *string
 	prevLocationURL *string
+	caughtPokemon   map[string]pokeapi.Pokemon
 }
 
 func startRepl(cfg *config) {
@@ -25,13 +26,13 @@ func startRepl(cfg *config) {
 			continue
 		}
 		commandName := words[0]
-		var area string
-		if commandName == "explore" && len(words) >= 2 {
-			area = words[1]
+		args := []string{}
+		if len(words) >= 2 {
+			args = words[1:]
 		}
 		command, ok := getCommands()[commandName]
 		if ok {
-			err := command.callback(cfg, area)
+			err := command.callback(cfg, args...)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -52,7 +53,7 @@ func cleanInput(words string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config, string) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -61,11 +62,6 @@ func getCommands() map[string]cliCommand {
 			name:        "help",
 			description: "Displays a help message",
 			callback:    commandHelp,
-		},
-		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    commandExit,
 		},
 		"map": {
 			name:        "map",
@@ -78,9 +74,19 @@ func getCommands() map[string]cliCommand {
 			callback:    commandMapb,
 		},
 		"explore": {
-			name:        "explore",
-			description: "lists the pokemon in a given area",
+			name:        "explore <location_name>",
+			description: "Lists the pokemon in a given area",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch <pokemon>",
+			description: "Throw a pokeball to catch a pokemon",
+			callback:    commandCatch,
+		},
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
 		},
 	}
 }
